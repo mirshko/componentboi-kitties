@@ -106,7 +106,7 @@ const IndexPage = () => {
             href={`mailto:jeff@reiner.design?subject=I'd like a CryptoKitty please!`}
             style={{ fontWeight: "bold" }}
           >
-            Contact
+            Request A Kitty
           </Button>
           <a href="https://twitter.com/mirshko/" title="Check out my Twitter">
             <Avatar style={{ background: "palevioletred" }}>CB</Avatar>

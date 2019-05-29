@@ -44,11 +44,13 @@ module.exports = {
         name: `kitties`,
         short_name: `kitties`,
         start_url: `/`,
-        background_color: `#fff`,
-        theme_color: `#fff`,
+        background_color: `#008080`,
+        theme_color: `#008080`,
         display: `minimal-ui`,
         icon: `src/images/favicon.png`
       }
-    }
+    },
+    `gatsby-plugin-netlify-cache`,
+    `gatsby-plugin-netlify`
   ]
 };
