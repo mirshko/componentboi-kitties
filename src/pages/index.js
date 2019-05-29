@@ -22,7 +22,13 @@ const useKitties = () => {
   } = useStaticQuery(
     graphql`
       {
-        allCryptokitties(filter: { id: { ne: "dummy" } }) {
+        allCryptokitties(
+          filter: {
+            id: { ne: "dummy" }
+            name: { ne: null }
+            image_original_url: { ne: null }
+          }
+        ) {
           edges {
             node {
               name
