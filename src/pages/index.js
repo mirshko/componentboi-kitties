@@ -1,7 +1,7 @@
-import React from "react"
-import { useStaticQuery, graphql } from "gatsby"
-import Img from "gatsby-image"
-import styled from "styled-components"
+import React from "react";
+import { useStaticQuery, graphql } from "gatsby";
+import Img from "gatsby-image";
+import styled from "styled-components";
 import {
   Window,
   Avatar,
@@ -10,15 +10,15 @@ import {
   Toolbar,
   Button,
   Hourglass,
-  Cutout,
-} from "react95"
+  Cutout
+} from "react95";
 
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Layout from "../components/layout";
+import SEO from "../components/seo";
 
 const useKitties = () => {
   const {
-    allCryptokitties: { edges },
+    allCryptokitties: { edges }
   } = useStaticQuery(
     graphql`
       {
@@ -40,71 +40,59 @@ const useKitties = () => {
         }
       }
     `
-  )
+  );
 
-  return edges
-}
+  return edges;
+};
 
 const KittyGrid = styled.div`
+  --spacing: 1rem;
+
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 1rem;
+  grid-gap: var(--spacing);
 
-  margin-top: calc(48px + 1rem);
-  margin-right: 1rem;
-  margin-left: 1rem;
-  margin-bottom: 1rem;
+  margin-top: calc(48px + var(--spacing));
+  margin-right: var(--spacing);
+  margin-left: var(--spacing);
+  margin-bottom: var(--spacing);
 
   @media screen and (min-width: 52em) {
+    --spacing: 2rem;
+
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-gap: 2rem;
-    margin-top: calc(48px + 2rem);
-    margin-right: 2rem;
-    margin-left: 2rem;
-    margin-bottom: 2rem;
   }
-`
+`;
+
+const Loader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+`;
 
 const KittyImageLoader = props => {
-  const [loading, setLoading] = React.useState(true)
+  const [isLoading, setIsLoading] = React.useState(true);
 
   return (
     <>
-      {loading && (
-        <Hourglass
-          size={32}
-          style={{
-            left: "50%",
-            top: "50%",
-            position: "absolute",
-            transform: "translateX(-50%)",
-          }}
-        />
+      {isLoading && (
+        <Loader>
+          <Hourglass size={32} />
+        </Loader>
       )}
-      <Img
-        placeholderStyle={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          width: "100%",
-          height: "100%",
-          borderRadius: 18,
-        }}
-        imgStyle={{
-          position: "absolute",
-          transform: "translate(-50%, -50%)",
-          left: "50%",
-          top: "50%",
-        }}
-        onLoad={() => setLoading(false)}
-        {...props}
-      />
+      <Img onLoad={() => setIsLoading(false)} {...props} />
     </>
-  )
-}
+  );
+};
 
 const IndexPage = () => {
-  const kitties = useKitties()
+  const kitties = useKitties();
 
   return (
     <Layout>
@@ -114,12 +102,13 @@ const IndexPage = () => {
         <Toolbar style={{ justifyContent: "space-between" }}>
           <Button
             as="a"
+            title="Ask me for a kitty!"
             href={`mailto:jeff@reiner.design?subject=I'd like a CryptoKitty please!`}
             style={{ fontWeight: "bold" }}
           >
-            Trade
+            Contact
           </Button>
-          <a href="https://twitter.com/mirshko/">
+          <a href="https://twitter.com/mirshko/" title="Check out my Twitter">
             <Avatar style={{ background: "palevioletred" }}>CB</Avatar>
           </a>
         </Toolbar>
@@ -132,7 +121,7 @@ const IndexPage = () => {
               style={{
                 whiteSpace: "nowrap",
                 overflow: "hidden",
-                textOverflow: "ellipsis",
+                textOverflow: "ellipsis"
               }}
             >
               {kitty.node.name}
@@ -143,10 +132,11 @@ const IndexPage = () => {
                 variant="menu"
                 size="sm"
                 target="_blank"
+                title="View details"
                 rel="noopener noreferrer"
                 href={kitty.node.external_link}
               >
-                View
+                Details
               </Button>
             </Toolbar>
             <Cutout
@@ -162,7 +152,7 @@ const IndexPage = () => {
         ))}
       </KittyGrid>
     </Layout>
-  )
-}
+  );
+};
 
-export default IndexPage
+export default IndexPage;
