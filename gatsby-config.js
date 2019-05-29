@@ -18,6 +18,7 @@ module.exports = {
           order_direction: "asc",
           asset_contract_address: "0x06012c8cf97bead5deae237070f9587f8e7a266d",
           owner: "0xC92DF132c0588C3d337D2E70225a9E85F2338088",
+          limit: "200",
         },
       },
     },

@@ -1,6 +1,17 @@
 import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
+import styled from "styled-components"
+import {
+  Window,
+  Avatar,
+  WindowHeader,
+  AppBar,
+  Toolbar,
+  Button,
+  Hourglass,
+  Cutout,
+} from "react95"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -17,8 +28,8 @@ const useKitties = () => {
               name
               localImage {
                 childImageSharp {
-                  fluid(maxWidth: 400) {
-                    ...GatsbyImageSharpFluid_withWebp_noBase64
+                  fluid(maxWidth: 500, quality: 100) {
+                    ...GatsbyImageSharpFluid_noBase64
                   }
                 }
               }
@@ -34,50 +45,63 @@ const useKitties = () => {
   return edges
 }
 
-const KittyName = props => (
-  <p
-    style={{
-      textDecoration: "none",
-      fontSize: 18,
-      margin: 0,
-      paddingTop: 16,
-      color: "#82817d",
-      lineHeight: 1,
-    }}
-    {...props}
-  />
-)
+const KittyGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 1rem;
 
-const KittyImage = props => (
-  <Img
-    placeholderStyle={{
-      position: "absolute",
-      left: 0,
-      top: 0,
-      width: "100%",
-      height: "100%",
-      borderRadius: 18,
-    }}
-    imgStyle={{
-      position: "absolute",
-      transform: "translate(-50%, -50%)",
-      left: "50%",
-      top: "50%",
-    }}
-    {...props}
-  />
-)
+  margin-top: calc(48px + 1rem);
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
 
-const KittyCard = ({ bg, ...rest }) => (
-  <div
-    style={{
-      backgroundColor: bg,
-      position: "relative",
-      borderRadius: 18,
-    }}
-    {...rest}
-  />
-)
+  @media screen and (min-width: 52em) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 2rem;
+    margin-top: calc(48px + 2rem);
+    margin-right: 2rem;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+  }
+`
+
+const KittyImageLoader = props => {
+  const [loading, setLoading] = React.useState(true)
+
+  return (
+    <>
+      {loading && (
+        <Hourglass
+          size={32}
+          style={{
+            left: "50%",
+            top: "50%",
+            position: "absolute",
+            transform: "translateX(-50%)",
+          }}
+        />
+      )}
+      <Img
+        placeholderStyle={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: "100%",
+          height: "100%",
+          borderRadius: 18,
+        }}
+        imgStyle={{
+          position: "absolute",
+          transform: "translate(-50%, -50%)",
+          left: "50%",
+          top: "50%",
+        }}
+        onLoad={() => setLoading(false)}
+        {...props}
+      />
+    </>
+  )
+}
 
 const IndexPage = () => {
   const kitties = useKitties()
@@ -86,30 +110,57 @@ const IndexPage = () => {
     <Layout>
       <SEO />
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gridGap: 32,
-        }}
-      >
+      <AppBar style={{ zIndex: 99999 }} fixed={false}>
+        <Toolbar style={{ justifyContent: "space-between" }}>
+          <Button
+            as="a"
+            href={`mailto:jeff@reiner.design?subject=I'd like a CryptoKitty please!`}
+            style={{ fontWeight: "bold" }}
+          >
+            Trade
+          </Button>
+          <a href="https://twitter.com/mirshko/">
+            <Avatar style={{ background: "palevioletred" }}>CB</Avatar>
+          </a>
+        </Toolbar>
+      </AppBar>
+
+      <KittyGrid>
         {kitties.map((kitty, index) => (
-          <div key={index}>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={kitty.node.external_link}
+          <Window key={index}>
+            <WindowHeader
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
             >
-              <KittyCard bg={`#${kitty.node.background_color}`}>
-                <KittyImage
-                  fluid={kitty.node.localImage.childImageSharp.fluid}
-                />
-              </KittyCard>
-            </a>
-            <KittyName>{kitty.node.name}</KittyName>
-          </div>
+              {kitty.node.name}
+            </WindowHeader>
+            <Toolbar>
+              <Button
+                as="a"
+                variant="menu"
+                size="sm"
+                target="_blank"
+                rel="noopener noreferrer"
+                href={kitty.node.external_link}
+              >
+                View
+              </Button>
+            </Toolbar>
+            <Cutout
+              style={{ backgroundColor: `#${kitty.node.background_color}` }}
+            >
+              <KittyImageLoader
+                title={kitty.node.name}
+                alt={kitty.node.name}
+                fluid={kitty.node.localImage.childImageSharp.fluid}
+              />
+            </Cutout>
+          </Window>
         ))}
-      </div>
+      </KittyGrid>
     </Layout>
   )
 }

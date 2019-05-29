@@ -1,11 +1,22 @@
 import React from "react"
+import { createGlobalStyle, ThemeProvider } from "styled-components"
+import { reset, themes } from "react95"
 import PropTypes from "prop-types"
 
-import "modern-normalize"
+const ResetStyles = createGlobalStyle`
+  ${reset}
+
+  body {
+    background-color: teal;
+  }
+`
 
 const Layout = ({ children }) => (
   <>
-    <main style={{ margin: 32 }}>{children}</main>
+    <ResetStyles />
+    <ThemeProvider theme={themes.default}>
+      <main>{children}</main>
+    </ThemeProvider>
   </>
 )
 
