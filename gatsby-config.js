@@ -8,6 +8,13 @@ module.exports = {
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-styled-components`,
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/src/images`
+      }
+    },
+    {
       resolve: "gatsby-source-apiserver",
       options: {
         url: "https://api.opensea.io/api/v1/assets/",
@@ -33,10 +40,11 @@ module.exports = {
     `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
-      options: {
-        name: `kitties`,
-        short_name: `kitties`,
-        start_url: `/`,
+        icon: `src/images/favicon.png`
+      }
+    }
+  ]
+};
         background_color: `#fff`,
         theme_color: `#fff`,
         display: `minimal-ui`,
