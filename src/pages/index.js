@@ -18,7 +18,7 @@ import SEO from "../components/seo";
 
 const useKitties = () => {
   const {
-    allCryptokitties: { edges }
+    allCryptokitties: { edges, totalCount }
   } = useStaticQuery(
     graphql`
       {
@@ -29,6 +29,7 @@ const useKitties = () => {
             image_original_url: { ne: null }
           }
         ) {
+          totalCount
           edges {
             node {
               name
@@ -48,7 +49,7 @@ const useKitties = () => {
     `
   );
 
-  return edges;
+  return [edges, totalCount];
 };
 
 const KittyGrid = styled.div`
@@ -98,7 +99,7 @@ const KittyImageLoader = props => {
 };
 
 const IndexPage = () => {
-  const kitties = useKitties();
+  const [kitties, kittyCount] = useKitties();
 
   return (
     <Layout>
